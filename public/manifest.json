@@ -1,0 +1,13 @@
+{
+  "name": "로또 번호 추천",
+  "short_name": "로또추천",
+  "description": "역대 당첨번호 조회 및 매주 추천 번호",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111827",
+  "theme_color": "#111827",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

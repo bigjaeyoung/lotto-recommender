@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>로또 번호 추천</title>
+  <meta name="theme-color" content="#111827" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="app-header">
+    <h1>🎱 로또 번호 추천</h1>
+    <p id="status-line" class="status-line">불러오는 중...</p>
+  </header>
+
+  <main>
+    <section class="card" id="recommend-card">
+      <h2>이번 주 추천 번호</h2>
+      <p class="sub" id="basis-line"></p>
+      <div id="rec-sets" class="rec-sets"></div>
+      <button id="reroll-btn" class="secondary-btn">다시 뽑기</button>
+    </section>
+
+    <section class="card" id="hot-card">
+      <h2>역대 최다 출현 번호 TOP 15</h2>
+      <div id="hot-numbers" class="hot-numbers"></div>
+    </section>
+
+    <section class="card" id="history-card">
+      <h2>회차별 당첨번호 조회</h2>
+      <div class="search-row">
+        <input id="round-input" type="number" placeholder="회차 번호 (예: 1200)" />
+        <button id="search-btn">조회</button>
+        <button id="latest-btn" class="secondary-btn">최신 회차</button>
+      </div>
+      <div id="draw-detail" class="draw-detail"></div>
+    </section>
+
+    <section class="card" id="table-card">
+      <h2>최근 회차 목록</h2>
+      <div id="draw-table" class="draw-table"></div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <p>데이터: 동행복권 공식 사이트 · 본 추천은 통계적 재미용이며 당첨을 보장하지 않습니다.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
