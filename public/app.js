@@ -1,3 +1,5 @@
+import { generateRecommendationSets } from './lotto-logic.js';
+
 const state = { draws: [], recommendation: null };
 
 function ballRange(n) {
@@ -13,30 +15,6 @@ function ball(n, size = '') {
   span.className = `ball range-${ballRange(n)} ${size}`.trim();
   span.textContent = n;
   return span;
-}
-
-function computeFrequency(draws) {
-  const freq = new Map();
-  for (let n = 1; n <= 45; n += 1) freq.set(n, 0);
-  draws.forEach((d) => d.numbers.forEach((n) => freq.set(n, freq.get(n) + 1)));
-  return freq;
-}
-
-function weightedSample(freqMap, count) {
-  const pool = [...freqMap.entries()].map(([num, w]) => ({ num, w: w + 1 }));
-  const picked = [];
-  for (let i = 0; i < count; i += 1) {
-    const total = pool.reduce((sum, p) => sum + p.w, 0);
-    let r = Math.random() * total;
-    let idx = 0;
-    for (; idx < pool.length; idx += 1) {
-      r -= pool[idx].w;
-      if (r <= 0) break;
-    }
-    picked.push(pool[idx].num);
-    pool.splice(idx, 1);
-  }
-  return picked.sort((a, b) => a - b);
 }
 
 function renderRecommendation(sets) {
@@ -64,6 +42,21 @@ function renderHotNumbers(hotNumbers) {
     const c = document.createElement('span');
     c.className = 'count';
     c.textContent = `${count}회`;
+    item.appendChild(c);
+    container.appendChild(item);
+  });
+}
+
+function renderColdNumbers(coldNumbers) {
+  const container = document.getElementById('cold-numbers');
+  container.innerHTML = '';
+  coldNumbers.forEach(({ num, gap }) => {
+    const item = document.createElement('div');
+    item.className = 'hot-item';
+    item.appendChild(ball(num, 'small'));
+    const c = document.createElement('span');
+    c.className = 'count';
+    c.textContent = `${gap}회째`;
     item.appendChild(c);
     container.appendChild(item);
   });
@@ -122,10 +115,11 @@ async function loadData() {
     status.textContent = `최신 ${latest.round}회(${latest.date}) 기준 · 총 ${draws.length}회차 데이터`;
 
     document.getElementById('basis-line').textContent =
-      `${recommendation.basedOnRounds}회까지의 출현 빈도를 반영한 추천 (자주 나온 번호일수록 뽑힐 확률이 높습니다)`;
+      `${recommendation.basedOnRounds}회까지의 출현 빈도·미출현 기간·번호쌍 상관관계·홀짝/구간 밸런스를 반영한 가중 무작위 추천입니다. (실제 당첨 확률을 높여주지는 않습니다)`;
 
     renderRecommendation(recommendation.sets);
     renderHotNumbers(recommendation.hotNumbers);
+    renderColdNumbers(recommendation.coldNumbers);
     renderDrawDetail(latest);
     renderTable(draws);
   } catch (err) {
@@ -136,8 +130,7 @@ async function loadData() {
 
 document.getElementById('reroll-btn').addEventListener('click', () => {
   if (!state.draws.length) return;
-  const freq = computeFrequency(state.draws);
-  const sets = Array.from({ length: 5 }, () => weightedSample(freq, 6));
+  const { sets } = generateRecommendationSets(state.draws, 5);
   renderRecommendation(sets);
 });
 

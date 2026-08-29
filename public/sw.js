@@ -1,5 +1,5 @@
 const CACHE = 'lotto-cache-v1';
-const CORE_ASSETS = ['./', './index.html', './app.js', './style.css', './manifest.json', './icons/icon.svg'];
+const CORE_ASSETS = ['./', './index.html', './app.js', './lotto-logic.js', './style.css', './manifest.json', './icons/icon.svg'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(CORE_ASSETS)));
